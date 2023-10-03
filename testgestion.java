@@ -1,66 +1,126 @@
 package work;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 
+import java.sql.*;
+import work.bjrorv.*;
+import work.myButton.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
-public class testgestion extends JFrame {
+public class testgestion extends JFrame implements ActionListener {
+	static JFrame fenetre = new JFrame("Nouveau projet");
+	static JButton button;
+	static int id_sav;
+	static String nom;
+	static String pren;
+	static String tel;
+	static String date;
+	static String num_tic;
+	static String etat_tic;
+	static String decla;
+	static DefaultTableModel newmodel = new DefaultTableModel(); 
+    static JTable table = new JTable(newmodel);
     
-    
+	
+	public static void test() {
+	
+		button = new JButton();
+		
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource()==button) {
+					
+				}
+				
+			}
+
+		});
+		button.setText("Ajoutez Ticket");
+		button.setBounds(2, 20 ,20,20);
+		button.setVisible(true);
+        button.setForeground(Color.BLUE);
+        button.setBackground(Color.BLUE);
+        
+        fenetre.add(button);
+         
+         
+	}
+	
+	
     private static final long serialVersionUID = 1L;
 
 	public static void main(String[] agrs) {
-                JFrame fenetre = new JFrame("Nouveau projet");
+		table.setBounds(30, 360, 800, 100);
+	    newmodel.addColumn("ID");
+	    newmodel.addColumn("Nom"); 
+	    newmodel.addColumn("Prénom"); 
+	    newmodel.addColumn("Téléphone"); 
+	    newmodel.addColumn("Numéro de ticket"); 
+	    newmodel.addColumn("Date"); 
+	    newmodel.addColumn("Etat du ticket"); 
+	    newmodel.addColumn("Declaration");
+	
+		test();
+		bjrorv goku = new bjrorv();
+		goku.Aurevoir();
+		
+		myButton button = new myButton();
+		button.test();
+	
+		{
+    		String url = "jdbc:mysql://localhost:8889/iPomme";
+    		String username = "new";
+    		String password= "new";
+    		
+        	try
+        	
+            {
+            Class.forName("com.mysql.cj.jdbc.Driver"); 
+            Connection conn = DriverManager.getConnection(url, username, password);
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery("SELECT * FROM SAV");
+            
+            while(res.next()) {
+            	id_sav = res.getInt(1);
+            	nom = res.getString(2);
+            	pren = res.getString(3);
+            	tel = res.getString(4);
+                date = res.getString(5);
+                num_tic = res.getString(6);
+                etat_tic = res.getString(7);
+                decla = res.getString(8);
+                
+				newmodel.addRow(new Object[]{id_sav, nom, pren, tel, date, num_tic, etat_tic, decla});
+                
+                System.out.println(decla);
+            }
+              conn.close();
+            }
+        	
+        	catch (Exception e1) {
+        		System.out.println(e1);
+        	}
+        	};
+		
+		
+		
+                
                 JButton btn = new JButton("Cliquez ici");
                 JButton delete_button = new JButton("Supprimez");
                 System.out.println("Ok");
-                {
-            		String url = "jdbc:mysql://localhost:8889/iPomme";
-            		String username = "new";
-            		String password="new";
-            		
-                	try
-                	
-                    {
-                    Class.forName("com.mysql.cj.jdbc.Driver"); 
-                    Connection conn = DriverManager.getConnection(url, username, password);
-                    Statement stmt = conn.createStatement();
-                    ResultSet res = stmt.executeQuery("SELECT * FROM User");
-                    
-                    while(res.next()) {
-                        System.out.println(res.getInt(1)+"  "+res.getString(2)
-                        +"  "+res.getString(3));
-                    }
-                      conn.close();
-                    }
-                	
-                	catch (Exception e) {
-                		System.out.println(e);
-                	}
-                	}
-
-
-                String[] colonne = new String[] {
-                    "Nom", 
-                    "Prenom", 
-                    "Telephone"
-                };
-
-                    Object[][] data = new Object[][] {
-                        {"Nom", "Prénom", "Numéro"}
-                    };
-                    
-            
                 
-                JTable table = new JTable (data, colonne);
-                table.setBounds(30, 360, 500, 100);
+             
+               
+             
+                
+                
+                
+                
 
                 JLabel nom = new JLabel("Nom");
                 nom.setBounds(30,40,200,30);
@@ -143,6 +203,10 @@ public class testgestion extends JFrame {
                 fenetre.add(cb);
                 fenetre.add(tc);
                 
+             
+                
+               
+                
               
 
 
@@ -154,6 +218,12 @@ public class testgestion extends JFrame {
                 
 
     }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }
